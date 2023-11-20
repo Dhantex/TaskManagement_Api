@@ -19,7 +19,7 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TaskManagement.Application"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TaskManagement.Domain", "TaskManagement.Domain\TaskManagement.Domain.csproj", "{A4A02216-6353-4828-8862-EE35910AAE1F}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TaskManagement.identity", "TaskManagement.identity\TaskManagement.identity.csproj", "{9D0B7ED3-C8BC-42EA-B486-61240241CCCE}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TaskManagement.Identity", "TaskManagement.identity\TaskManagement.Identity.csproj", "{9D0B7ED3-C8BC-42EA-B486-61240241CCCE}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TaskManagement.Infrastructure", "TaskManagement.Infrastructure\TaskManagement.Infrastructure.csproj", "{7F90E391-BE4D-446A-864B-B21FDB8158C6}"
 EndProject
