@@ -6,6 +6,10 @@ namespace TaskManagement.Infrastructure.Persistence
 {
     public class TaskManagerDbContext : DbContext
     {
+        public TaskManagerDbContext(DbContextOptions<TaskManagerDbContext> options) : base(options)
+        {
+        }
+
         public override Task<int> SaveChangesAsync(CancellationToken cancellationToken = default)
         {
             foreach (var entry in ChangeTracker.Entries<BaseDomainModel>())
