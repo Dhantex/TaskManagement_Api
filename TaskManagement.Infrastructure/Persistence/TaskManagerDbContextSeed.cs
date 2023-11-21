@@ -18,7 +18,7 @@ namespace TaskManagement.Infrastructure.Persistence
             // Seed StatusTypes if they don't exist
             if (!context.StatusTypes!.Any())
             {
-                context.StatusTypes!.AddRange(GetPreconfiguredGenericTaskStatuses());
+                context.StatusTypes!.AddRange(GetPreconfiguredGenericTaskStatusTypes());
                 await context.SaveChangesAsync();
                 logger.LogInformation("Seed database associated with context {DbContextName}", typeof(TaskManagerDbContext).Name);
             }
@@ -48,11 +48,11 @@ namespace TaskManagement.Infrastructure.Persistence
                         logger.LogInformation("Seed GenericTaskCategories associated with context {DbContextName}", typeof(TaskManagerDbContext).Name);
                     }
 
-                    if (!context.GenericTaskStatuses!.Any())
+                    if (!context.GenericTaskStatusTypes!.Any())
                     {
                         foreach (var task in context.GenericTasks!)
                         {
-                            context.GenericTaskStatuses!.Add(new GenericTaskStatus { GenericTaskId = task.Id, TaskStatusId = activeStatusId.Value, IsActive = true });
+                            context.GenericTaskStatusTypes!.Add(new GenericTaskStatusType { GenericTaskId = task.Id, TaskStatusId = activeStatusId.Value, IsActive = true });
                         }
                         await context.SaveChangesAsync();
                         logger.LogInformation("Seed GenericTaskStatuses associated with context {DbContextName}", typeof(TaskManagerDbContext).Name);
@@ -72,7 +72,7 @@ namespace TaskManagement.Infrastructure.Persistence
         };
         }
 
-        private static IEnumerable<StatusType> GetPreconfiguredGenericTaskStatuses()
+        private static IEnumerable<StatusType> GetPreconfiguredGenericTaskStatusTypes()
         {
             return new List<StatusType>
         {

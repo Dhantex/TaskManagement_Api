@@ -7,8 +7,17 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <Compile Remove="Features\Category\**" />
+    <EmbeddedResource Remove="Features\Category\**" />
+    <None Remove="Features\Category\**" />
+  </ItemGroup>
+
+  <ItemGroup>
     <Folder Include="Contracts\Identity\" />
-    <Folder Include="Features\" />
+    <Folder Include="Features\Categories\Commands\UpdateCategory\" />
+    <Folder Include="Features\Categories\Queries\" />
+    <Folder Include="Features\StatusTypes\Commands\UpdateStatusTypes\" />
+    <Folder Include="Features\StatusTypes\Queries\" />
   </ItemGroup>
 
   <ItemGroup>

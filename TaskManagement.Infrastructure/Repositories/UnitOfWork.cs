@@ -10,6 +10,15 @@ namespace TaskManagement.Infrastructure.Repositories
         private Hashtable _repositories;
         private readonly TaskManagerDbContext _context;
 
+
+        private ICategoryRepository _categoryRepository;
+        private IGenericTaskRepository _genericTaskRepository;
+        private IStatusTypeRepository _statusTypeRepository;
+
+        public ICategoryRepository CategoryRepository => _categoryRepository ??= new CategoryRepository(_context);
+        public IGenericTaskRepository GenericTaskRepository => _genericTaskRepository ??= new GenericTaskRepository(_context);
+        public IStatusTypeRepository StatusTypeRepository => _statusTypeRepository ??= new StatusTypeRepository(_context);
+
         public UnitOfWork(TaskManagerDbContext context)
         {
             _context = context;

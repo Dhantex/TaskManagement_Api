@@ -16,6 +16,10 @@ namespace TaskManagement.Infrastructure
 
             services.AddScoped<IUnitOfWork, UnitOfWork>();
             services.AddScoped(typeof(IAsyncRepository<>), typeof(RepositoryBase<>));
+            services.AddScoped<ICategoryRepository, CategoryRepository>();
+            services.AddScoped<IGenericTaskRepository, GenericTaskRepository>();
+            services.AddScoped<IStatusTypeRepository, StatusTypeRepository>();
+
             return services;
         }
     }

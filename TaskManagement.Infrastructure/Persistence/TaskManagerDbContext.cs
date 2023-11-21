@@ -34,26 +34,27 @@ namespace TaskManagement.Infrastructure.Persistence
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
 
-            // Configuring the many-to-many relationship between GenericTasks and Categories
-            modelBuilder.Entity<GenericTask>()
-                .HasMany(g => g.Categories)
-                .WithMany(c => c.GenericTasks)
+            modelBuilder.Entity<Category>()
+                .HasMany(p => p.GenericTasks)
+                .WithMany(t => t.Categories)
                 .UsingEntity<GenericTaskCategory>(
-                    pt => pt.HasKey(e => new { e.GenericTaskId, e.CategoryId }));
+                    pt => pt.HasKey(e => new { e.GenericTaskId, e.CategoryId })
+                );
 
-            // Configuring the many-to-many relationship between GenericTasks and TaskStatuses
-            modelBuilder.Entity<GenericTask>()
-                .HasMany(g => g.TaskStatuses)
-                .WithMany(t => t.GenericTasks)
-                .UsingEntity<GenericTaskStatus>(
-                    pt => pt.HasKey(e => new { e.GenericTaskId, e.TaskStatusId }));
+
+            modelBuilder.Entity<StatusType>()
+                .HasMany(p => p.GenericTasks)
+                .WithMany(t => t.StatusTypes)
+                .UsingEntity<GenericTaskStatusType>(
+                    pt => pt.HasKey(e => new { e.GenericTaskId, e.TaskStatusId })
+                );
         }
 
         public DbSet<GenericTask>? GenericTasks { get; set; }
         public DbSet<Category>? Categories { get; set; }
 
         public DbSet<GenericTaskCategory>? GenericTaskCategories { get; set; }
-        public DbSet<GenericTaskStatus>? GenericTaskStatuses { get; set; }
+        public DbSet<GenericTaskStatusType>? GenericTaskStatusTypes { get; set; }
         public DbSet<StatusType>? StatusTypes { get; set; }
 
     }
