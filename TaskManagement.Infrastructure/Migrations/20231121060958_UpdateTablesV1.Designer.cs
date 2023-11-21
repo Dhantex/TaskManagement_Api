@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using TaskManagement.Infrastructure.Persistence;
 
@@ -11,9 +12,11 @@ using TaskManagement.Infrastructure.Persistence;
 namespace TaskManagement.Infrastructure.Migrations
 {
     [DbContext(typeof(TaskManagerDbContext))]
-    partial class TaskManagerDbContextModelSnapshot : ModelSnapshot
+    [Migration("20231121060958_UpdateTablesV1")]
+    partial class UpdateTablesV1
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -98,6 +101,9 @@ namespace TaskManagement.Infrastructure.Migrations
                     b.Property<DateTime?>("CreatedDate")
                         .HasColumnType("datetime2");
 
+                    b.Property<int>("Id")
+                        .HasColumnType("int");
+
                     b.Property<bool>("IsActive")
                         .HasColumnType("bit");
 
@@ -119,7 +125,7 @@ namespace TaskManagement.Infrastructure.Migrations
                     b.Property<int>("GenericTaskId")
                         .HasColumnType("int");
 
-                    b.Property<int>("StatusTypeId")
+                    b.Property<int>("TaskStatusId")
                         .HasColumnType("int");
 
                     b.Property<string>("CreatedBy")
@@ -127,6 +133,9 @@ namespace TaskManagement.Infrastructure.Migrations
 
                     b.Property<DateTime?>("CreatedDate")
                         .HasColumnType("datetime2");
+
+                    b.Property<int>("Id")
+                        .HasColumnType("int");
 
                     b.Property<bool>("IsActive")
                         .HasColumnType("bit");
@@ -137,9 +146,12 @@ namespace TaskManagement.Infrastructure.Migrations
                     b.Property<DateTime?>("LastModifiedDate")
                         .HasColumnType("datetime2");
 
-                    b.HasKey("GenericTaskId", "StatusTypeId");
+                    b.Property<int>("StatusTypesId")
+                        .HasColumnType("int");
 
-                    b.HasIndex("StatusTypeId");
+                    b.HasKey("GenericTaskId", "TaskStatusId");
+
+                    b.HasIndex("StatusTypesId");
 
                     b.ToTable("GenericTaskStatusTypes");
                 });
@@ -197,7 +209,7 @@ namespace TaskManagement.Infrastructure.Migrations
 
                     b.HasOne("TaskManagement.Domain.StatusType", null)
                         .WithMany()
-                        .HasForeignKey("StatusTypeId")
+                        .HasForeignKey("StatusTypesId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
                 });

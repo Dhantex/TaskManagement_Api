@@ -46,8 +46,17 @@ namespace TaskManagement.Infrastructure.Persistence
                 .HasMany(p => p.GenericTasks)
                 .WithMany(t => t.StatusTypes)
                 .UsingEntity<GenericTaskStatusType>(
-                    pt => pt.HasKey(e => new { e.GenericTaskId, e.TaskStatusId })
+                    pt => pt.HasKey(e => new { e.GenericTaskId, e.StatusTypeId })
                 );
+
+            modelBuilder.Entity<GenericTaskCategory>()
+                .Ignore(gtc => gtc.Id);
+
+            modelBuilder.Entity<GenericTaskStatusType>()
+                .Ignore(gtst => gtst.Id);
+
+
+
         }
 
         public DbSet<GenericTask>? GenericTasks { get; set; }

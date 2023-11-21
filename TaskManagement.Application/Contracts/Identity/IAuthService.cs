@@ -1,6 +1,6 @@
 ﻿using TaskManagement.Application.Models.Identity;
 
-namespace TaskManagement.Application.Contracts.Infrastructure
+namespace TaskManagement.Application.Contracts.Identity
 {
     public interface IAuthService
     {

@@ -5,7 +5,7 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.IdentityModel.Tokens;
 using System.Text;
-using TaskManagement.Application.Contracts.Infrastructure;
+using TaskManagement.Application.Contracts.Identity;
 using TaskManagement.Application.Models.Identity;
 using TaskManagement.Identity.Models;
 using TaskManagement.Identity.Services;

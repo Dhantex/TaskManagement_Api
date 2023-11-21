@@ -5,7 +5,7 @@ using System.Net;
 using TaskManagement.Application.Features.GenericTasks.Commands.CreateGenericTask;
 using TaskManagement.Application.Features.GenericTasks.Commands.DeleteGenericTask;
 using TaskManagement.Application.Features.GenericTasks.Commands.UpdateGenericTask;
-using TaskManagement.Application.Features.GenericTasks.Queries.GetGenericTaskList;
+using TaskManagement.Application.Features.GenericTasks.Queries.GetGenericTaskDetailsList;
 
 namespace TaskManagement.Api.Controllers
 {
@@ -54,12 +54,29 @@ namespace TaskManagement.Api.Controllers
             return NoContent();
         }
 
-        [HttpGet("{categoryName}", Name = "GetGenericTask")]
-        [Authorize]
-        [ProducesResponseType(typeof(IEnumerable<GenericTaskList>), (int)HttpStatusCode.OK)]
-        public async Task<ActionResult<IEnumerable<GenericTaskList>>> GetGenericTask(string categoryName)
+        [HttpGet("{categoryId:int}", Name = "GetGenericTaskDetailsById")]
+        [ProducesResponseType(typeof(IEnumerable<GenericTaskDetail>), (int)HttpStatusCode.OK)]
+        public async Task<ActionResult<IEnumerable<GenericTaskDetail>>> GetGenericTaskDetailsById(int categoryId)
         {
-            var query = new GetGenericTaskListQuery(categoryName);
+            var query = new GetGenericTaskDetailQuery(null, categoryId);
+            var videos = await _mediator.Send(query);
+            return Ok(videos);
+        }
+
+        [HttpGet("details/{categoryName?}", Name = "GetGenericTaskDetails")]
+        [ProducesResponseType(typeof(IEnumerable<GenericTaskDetail>), (int)HttpStatusCode.OK)]
+        public async Task<ActionResult<IEnumerable<GenericTaskDetail>>> GetGenericTaskDetails(string? categoryName = null)
+        {
+            var query = new GetGenericTaskDetailQuery(categoryName!, 0);
+            var videos = await _mediator.Send(query);
+            return Ok(videos);
+        }
+
+        [HttpGet("details/all", Name = "GetAllGenericTaskDetails")]
+        [ProducesResponseType(typeof(IEnumerable<GenericTaskDetail>), (int)HttpStatusCode.OK)]
+        public async Task<ActionResult<IEnumerable<GenericTaskDetail>>> GetGenericTaskDetails()
+        {
+            var query = new GetGenericTaskDetailQuery(null,0);
             var videos = await _mediator.Send(query);
             return Ok(videos);
         }

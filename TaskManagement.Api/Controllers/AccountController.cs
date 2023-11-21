@@ -1,5 +1,5 @@
 ﻿using Microsoft.AspNetCore.Mvc;
-using TaskManagement.Application.Contracts.Infrastructure;
+using TaskManagement.Application.Contracts.Identity;
 using TaskManagement.Application.Models.Identity;
 
 namespace TaskManagement.Api.Controllers

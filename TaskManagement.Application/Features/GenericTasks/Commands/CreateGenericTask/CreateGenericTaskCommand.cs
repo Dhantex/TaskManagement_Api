@@ -7,7 +7,7 @@ namespace TaskManagement.Application.Features.GenericTasks.Commands.CreateGeneri
         public string Name { get; set; } = string.Empty;
         public string Description { get; set; } = string.Empty;
         public int CategoryId { get; set; }
-        public int TaskStatusId { get; set; }
+        public int StatusTypeId { get; set; }
 
     }
 }

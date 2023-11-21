@@ -23,7 +23,7 @@ namespace TaskManagement.Application.Features.GenericTasks.Commands.CreateGeneri
         {
 
             var categoryExists = await _unitOfWork.CategoryRepository.GetByIdAsync(request.CategoryId);
-            var statusExists = await _unitOfWork.StatusTypeRepository.GetByIdAsync(request.TaskStatusId);
+            var statusExists = await _unitOfWork.StatusTypeRepository.GetByIdAsync(request.StatusTypeId);
 
             if (categoryExists == null|| statusExists == null )
             {

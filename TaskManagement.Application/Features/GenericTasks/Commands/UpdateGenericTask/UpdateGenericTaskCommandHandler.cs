@@ -8,7 +8,6 @@ namespace TaskManagement.Application.Features.GenericTasks.Commands.UpdateGeneri
 {
     public class UpdateGenericTaskCommandHandler : IRequestHandler<UpdateGenericTaskCommand>
     {
-        //private readonly IStreamerRepository _streamerRepository;
         IUnitOfWork _unitOfWork;
         private readonly IMapper _mapper;
         private readonly ILogger<UpdateGenericTaskCommandHandler> _logger;

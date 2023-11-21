@@ -19,7 +19,7 @@ namespace TaskManagement.Application.Features.GenericTasks.Commands.CreateGeneri
             RuleFor(p => p.CategoryId)
                 .GreaterThan(0).WithMessage("{CategoryId} can not be blank or zero");
 
-            RuleFor(p => p.TaskStatusId)
+            RuleFor(p => p.StatusTypeId)
                 .GreaterThan(0).WithMessage("{TaskStatusId} can not be blank or zero")
                 .NotNull();
         }

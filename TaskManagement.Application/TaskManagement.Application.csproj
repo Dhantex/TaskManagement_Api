@@ -13,11 +13,9 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Folder Include="Contracts\Identity\" />
+    <Folder Include="Contracts\Infrastructure\" />
     <Folder Include="Features\Categories\Commands\UpdateCategory\" />
-    <Folder Include="Features\Categories\Queries\" />
     <Folder Include="Features\StatusTypes\Commands\UpdateStatusTypes\" />
-    <Folder Include="Features\StatusTypes\Queries\" />
   </ItemGroup>
 
   <ItemGroup>

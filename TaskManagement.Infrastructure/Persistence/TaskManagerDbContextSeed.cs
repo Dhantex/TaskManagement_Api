@@ -31,12 +31,12 @@ namespace TaskManagement.Infrastructure.Persistence
                 logger.LogInformation("Seed database associated with context {DbContextName}", typeof(TaskManagerDbContext).Name);
             }
 
-            if (context.GenericTasks!.Any() && context.Categories!.Any() && context.StatusTypes!.Any())
+            if (context.GenericTasks!.Any() && context.Categories!.Any())
             {
-                var inProgressCategoryId = context.Categories!.FirstOrDefault(c => c.Name == "In Progress")?.Id;
+                var inProgressCategoryId = context.Categories!.FirstOrDefault(c => c.Name == "To Be Assigned")?.Id;
                 var activeStatusId = context.StatusTypes!.FirstOrDefault(s => s.Name == "Active")?.Id;
 
-                if (inProgressCategoryId.HasValue && activeStatusId.HasValue)
+                if (inProgressCategoryId.HasValue)
                 {
                     if (!context.GenericTaskCategories!.Any())
                     {
@@ -47,12 +47,15 @@ namespace TaskManagement.Infrastructure.Persistence
                         await context.SaveChangesAsync();
                         logger.LogInformation("Seed GenericTaskCategories associated with context {DbContextName}", typeof(TaskManagerDbContext).Name);
                     }
+                }
 
+                if (activeStatusId.HasValue)
+                {
                     if (!context.GenericTaskStatusTypes!.Any())
                     {
                         foreach (var task in context.GenericTasks!)
                         {
-                            context.GenericTaskStatusTypes!.Add(new GenericTaskStatusType { GenericTaskId = task.Id, TaskStatusId = activeStatusId.Value, IsActive = true });
+                            context.GenericTaskStatusTypes!.Add(new GenericTaskStatusType { GenericTaskId = task.Id, StatusTypeId = activeStatusId.Value, IsActive = true });
                         }
                         await context.SaveChangesAsync();
                         logger.LogInformation("Seed GenericTaskStatuses associated with context {DbContextName}", typeof(TaskManagerDbContext).Name);
@@ -65,22 +68,22 @@ namespace TaskManagement.Infrastructure.Persistence
         private static IEnumerable<Category> GetPreconfiguredCategories()
         {
             return new List<Category>
-        {
-            new Category { CreatedBy = "system", Name = "In Progress" }, 
-            new Category { CreatedBy = "system", Name = "To Be Assigned" },
-            new Category { CreatedBy = "system", Name = "Completed" }
-        };
+            {
+                new Category { CreatedBy = "system", Name = "In Progress" },
+                new Category { CreatedBy = "system", Name = "To Be Assigned" },
+                new Category { CreatedBy = "system", Name = "Completed" }
+            };
         }
 
         private static IEnumerable<StatusType> GetPreconfiguredGenericTaskStatusTypes()
         {
             return new List<StatusType>
-        {
-            new StatusType { CreatedBy = "system", Name = "Active" },
-            new StatusType { CreatedBy = "system", Name = "In Progress" }, 
-            new StatusType { CreatedBy = "system", Name = "Overdue" },
-            new StatusType { CreatedBy = "system", Name = "Closed" },
-        };
+            {
+                new StatusType { CreatedBy = "system", Name = "Active" },
+                new StatusType { CreatedBy = "system", Name = "In Progress" },
+                new StatusType { CreatedBy = "system", Name = "Overdue" },
+                new StatusType { CreatedBy = "system", Name = "Closed" },
+            };
         }
 
         private static IEnumerable<GenericTask> GetPreconfiguredGenericTasks()

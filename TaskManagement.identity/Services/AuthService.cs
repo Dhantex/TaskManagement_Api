@@ -5,7 +5,7 @@ using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
 using System.Text;
 using TaskManagement.Application.Constants;
-using TaskManagement.Application.Contracts.Infrastructure;
+using TaskManagement.Application.Contracts.Identity;
 using TaskManagement.Application.Models.Identity;
 using TaskManagement.Identity.Models;
 
