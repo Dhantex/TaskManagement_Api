@@ -88,8 +88,8 @@ namespace TaskManagement.Api.Controllers
         public async Task<ActionResult<IEnumerable<GenericTaskDetail>>> GetGenericTaskDetailsById(int categoryId)
         {
             var query = new GetGenericTaskDetailQuery(null, categoryId);
-            var videos = await _mediator.Send(query);
-            return Ok(videos);
+            var categories = await _mediator.Send(query);
+            return Ok(categories);
         }
 
         [HttpGet("details/{categoryName?}", Name = "GetGenericTaskDetails")]
@@ -97,8 +97,8 @@ namespace TaskManagement.Api.Controllers
         public async Task<ActionResult<IEnumerable<GenericTaskDetail>>> GetGenericTaskDetails(string? categoryName = null)
         {
             var query = new GetGenericTaskDetailQuery(categoryName!, 0);
-            var videos = await _mediator.Send(query);
-            return Ok(videos);
+            var genericTaskDetail = await _mediator.Send(query);
+            return Ok(genericTaskDetail);
         }
 
         [HttpGet("details/all", Name = "GetAllGenericTaskDetails")]
@@ -106,8 +106,8 @@ namespace TaskManagement.Api.Controllers
         public async Task<ActionResult<IEnumerable<GenericTaskDetail>>> GetGenericTaskDetails()
         {
             var query = new GetGenericTaskDetailQuery(null,0);
-            var videos = await _mediator.Send(query);
-            return Ok(videos);
+            var genericTaskDetailAll = await _mediator.Send(query);
+            return Ok(genericTaskDetailAll);
         }
     }
 }

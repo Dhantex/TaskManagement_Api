@@ -32,8 +32,8 @@ namespace TaskManagement.Api.Controllers
         public async Task<ActionResult<IEnumerable<StatusTypesList>>> GetAllStatusTypes()
         {
             var query = new GetStatusTypesQuery(null); ;
-            var videos = await _mediator.Send(query);
-            return Ok(videos);
+            var statusTypes = await _mediator.Send(query);
+            return Ok(statusTypes);
         }
     }
 }

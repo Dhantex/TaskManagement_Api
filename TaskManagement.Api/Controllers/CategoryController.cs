@@ -31,8 +31,8 @@ namespace TaskManagement.Api.Controllers
         public async Task<ActionResult<IEnumerable<CategoriesList>>> GetAllCategories()
         {
             var query = new GetCategoriesQuery(null);
-            var videos = await _mediator.Send(query);
-            return Ok(videos);
+            var categories = await _mediator.Send(query);
+            return Ok(categories);
         }
     }
 }

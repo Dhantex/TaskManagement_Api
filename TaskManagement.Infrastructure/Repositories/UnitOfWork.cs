@@ -27,6 +27,8 @@ namespace TaskManagement.Infrastructure.Repositories
             _context = context;
         }
 
+        public TaskManagerDbContext TaskManagerDbContext => _context;
+
         public async Task<int> Complete()
         {
             return await _context.SaveChangesAsync();
