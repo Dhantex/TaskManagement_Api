@@ -2,11 +2,12 @@
 using MediatR;
 using Microsoft.Extensions.Logging;
 using TaskManagement.Application.Contracts.Persistence;
+using TaskManagement.Application.Models.GenericTask;
 using TaskManagement.Domain;
 
 namespace TaskManagement.Application.Features.GenericTasks.Commands.CreateGenericTask
 {
-    public class CreateGenericTaskCommandHandler : IRequestHandler<CreateGenericTaskCommand, int>
+    public class CreateGenericTaskCommandHandler : IRequestHandler<CreateGenericTaskCommand, GenericTaskDto>
     {
         private readonly IUnitOfWork _unitOfWork;
         private readonly IMapper _mapper;
@@ -19,31 +20,44 @@ namespace TaskManagement.Application.Features.GenericTasks.Commands.CreateGeneri
             _logger = logger;
         }
 
-        public async Task<int> Handle(CreateGenericTaskCommand request, CancellationToken cancellationToken)
+        public async Task<GenericTaskDto> Handle(CreateGenericTaskCommand request, CancellationToken cancellationToken)
         {
-
             var categoryExists = await _unitOfWork.CategoryRepository.GetByIdAsync(request.CategoryId);
             var statusExists = await _unitOfWork.StatusTypeRepository.GetByIdAsync(request.StatusTypeId);
 
-            if (categoryExists == null|| statusExists == null )
+            if (categoryExists == null || statusExists == null)
             {
                 throw new Exception("Category or Status does not exist");
             }
 
-            var genericTaskEntity = _mapper.Map<GenericTask>(request);
+            var addGenericTask = _mapper.Map<GenericTask>(request);
 
-            _unitOfWork.GenericTaskRepository.AddEntity(genericTaskEntity);
-
-            var result = await _unitOfWork.Complete();
-
-            if (result <= 0)
+            using (var transaction = await _unitOfWork.BeginTransactionAsync())
             {
-                throw new Exception($"Could not insert generic Task record");
+                try
+                {
+                    var genericTask = await _unitOfWork.GenericTaskRepository.AddAsync(addGenericTask);
+
+                    if (genericTask == null)
+                    {
+                        await _unitOfWork.RollbackTransactionAsync(transaction);
+                        throw new Exception("could not create generic Task");
+                    }
+
+                    await _unitOfWork.GenericTaskRepository.CreateGenericTaskRelationships(request, genericTask.Id);
+                    await _unitOfWork.CommitTransactionAsync(transaction);
+
+                    _logger.LogInformation($"Generic Task {genericTask.Id} was successfully created");
+
+                    var genericTaskDto = _mapper.Map<GenericTaskDto>(addGenericTask);
+                    return genericTaskDto;
+                }
+                catch
+                {
+                    await _unitOfWork.RollbackTransactionAsync(transaction);
+                    throw;
+                }
             }
-
-            _logger.LogInformation($"Generic Task {genericTaskEntity.Id} was successfully created");
-
-            return genericTaskEntity.Id;
         }
     }
 

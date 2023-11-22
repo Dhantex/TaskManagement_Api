@@ -1,5 +1,7 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using TaskManagement.Application.Contracts.Persistence;
+using TaskManagement.Application.Features.GenericTasks.Commands.CreateGenericTask;
+using TaskManagement.Application.Features.GenericTasks.Commands.UpdateCategoryGenericTask;
 using TaskManagement.Application.Features.GenericTasks.Queries.GetGenericTaskDetailsList;
 using TaskManagement.Domain;
 using TaskManagement.Infrastructure.Persistence;
@@ -28,10 +30,74 @@ namespace TaskManagement.Infrastructure.Repositories
                             CategoryId = category.Id,
                             NameCategory = category.Name,
                             StatusTypeId = status.Id,
-                            NameStatusType = status.Name
+                            NameStatusType = status.Name,
+                            CreatedBy = task.CreatedBy,
+                            CreatedDate = task.CreatedDate,
+                            DueDate = task.DueDate
+
                         };
 
             return await query.ToListAsync();
+        }
+
+
+        public async Task<int> CreateGenericTaskRelationships(CreateGenericTaskCommand command, int genericTaskId)
+        {
+            // Associate the task with the category
+            var taskCategory = new GenericTaskCategory
+            {
+                GenericTaskId = genericTaskId,
+                CategoryId = command.CategoryId,
+                IsActive = true
+            };
+
+            // Associate the task with the status
+            var taskStatusType = new GenericTaskStatusType
+            {
+                GenericTaskId = genericTaskId,
+                StatusTypeId = command.StatusTypeId,
+                IsActive = true
+            };
+
+            await _context.GenericTaskCategories!.AddAsync(taskCategory);
+            await _context.GenericTaskStatusTypes!.AddAsync(taskStatusType);
+
+            return genericTaskId;
+        }
+
+        public async Task<int> UpdateGenericTaskCategory(UpdateCategoryGenericTaskCommand command)
+        {
+            var existingRelation = await _context.GenericTaskCategories!.FirstOrDefaultAsync(c => c.GenericTaskId == command.GenericTaskId
+                                                           && c.CategoryId == command.CategoryId);
+
+            var deactivateRelationship = await _context.GenericTaskCategories!.FirstOrDefaultAsync(c => c.GenericTaskId == command.GenericTaskId
+                                                                       && c.IsActive);
+
+            if (existingRelation == null)
+            {
+                var newTaskCategory = new GenericTaskCategory
+                {
+                    GenericTaskId = command.GenericTaskId,
+                    CategoryId = command.CategoryId,
+                    IsActive = true
+                };
+
+                await _context.GenericTaskCategories!.AddAsync(newTaskCategory);
+            }
+            else
+            {
+                existingRelation.IsActive = !existingRelation.IsActive;
+                _context.GenericTaskCategories?.Update(existingRelation);
+            }
+
+            
+            if(deactivateRelationship != null)
+            {
+                deactivateRelationship.IsActive = false;
+                _context.GenericTaskCategories?.Update(deactivateRelationship);
+            }
+
+            return command.CategoryId;
         }
     }
 }

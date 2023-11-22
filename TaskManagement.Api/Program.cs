@@ -3,8 +3,15 @@ using TaskManagement.Infrastructure;
 using TaskManagement.Application;
 using TaskManagement.Api.Middleware;
 using TaskManagement.Infrastructure.Persistence;
+using System.Text.Json.Serialization;
 
 var builder = WebApplication.CreateBuilder(args);
+
+//builder.Services.AddControllers().AddJsonOptions(options =>
+//{
+//    options.JsonSerializerOptions.ReferenceHandler = ReferenceHandler.Preserve;
+//});
+
 
 // Add services to the container.
 builder.Services.AddControllers();

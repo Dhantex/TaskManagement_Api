@@ -1,4 +1,5 @@
-﻿using System.Collections;
+﻿using Microsoft.EntityFrameworkCore.Storage;
+using System.Collections;
 using TaskManagement.Application.Contracts.Persistence;
 using TaskManagement.Domain.Common;
 using TaskManagement.Infrastructure.Persistence;
@@ -14,10 +15,12 @@ namespace TaskManagement.Infrastructure.Repositories
         private ICategoryRepository _categoryRepository;
         private IGenericTaskRepository _genericTaskRepository;
         private IStatusTypeRepository _statusTypeRepository;
+        private IGenericTaskCategoryRepository _genericTaskCategoryRepository;
 
         public ICategoryRepository CategoryRepository => _categoryRepository ??= new CategoryRepository(_context);
         public IGenericTaskRepository GenericTaskRepository => _genericTaskRepository ??= new GenericTaskRepository(_context);
         public IStatusTypeRepository StatusTypeRepository => _statusTypeRepository ??= new StatusTypeRepository(_context);
+        public IGenericTaskCategoryRepository GenericTaskCategoryRepository => _genericTaskCategoryRepository ??= new GenericTaskCategoryRepository(_context);
 
         public UnitOfWork(TaskManagerDbContext context)
         {
@@ -52,5 +55,29 @@ namespace TaskManagement.Infrastructure.Repositories
 
             return (IAsyncRepository<TEntity>)_repositories[type];
         }
+
+        public async Task<IDbContextTransaction> BeginTransactionAsync()
+        {
+            return await _context.Database.BeginTransactionAsync();
+        }
+
+        public async Task CommitTransactionAsync(IDbContextTransaction transaction)
+        {
+            try
+            {
+                await _context.SaveChangesAsync();
+                await transaction.CommitAsync();
+            }
+            catch
+            {
+                throw new Exception("Error when try CommitTransactionAsync");
+            }
+        }
+
+        public async Task RollbackTransactionAsync(IDbContextTransaction transaction)
+        {
+            await transaction.RollbackAsync();
+        }
+
     }
 }

@@ -4,8 +4,11 @@ using Microsoft.AspNetCore.Mvc;
 using System.Net;
 using TaskManagement.Application.Features.GenericTasks.Commands.CreateGenericTask;
 using TaskManagement.Application.Features.GenericTasks.Commands.DeleteGenericTask;
+using TaskManagement.Application.Features.GenericTasks.Commands.UpdateCategoryGenericTask;
 using TaskManagement.Application.Features.GenericTasks.Commands.UpdateGenericTask;
 using TaskManagement.Application.Features.GenericTasks.Queries.GetGenericTaskDetailsList;
+using TaskManagement.Application.Models.GenericTask;
+using TaskManagement.Domain;
 
 namespace TaskManagement.Api.Controllers
 {
@@ -22,7 +25,7 @@ namespace TaskManagement.Api.Controllers
 
         [HttpPost(Name = "CreateGenericTask")]
         [ProducesResponseType((int)HttpStatusCode.OK)]
-        public async Task<ActionResult<int>> CreateGenericTask([FromBody] CreateGenericTaskCommand command)
+        public async Task<ActionResult<GenericTaskDto>> CreateGenericTask([FromBody] CreateGenericTaskCommand command)
         {
             return await _mediator.Send(command);
         }
@@ -37,6 +40,20 @@ namespace TaskManagement.Api.Controllers
 
             return NoContent();
         }
+
+
+
+        [HttpPut("UpdateCategoryId", Name = "UpdateCategoryGenericTask")]
+        [ProducesResponseType(StatusCodes.Status204NoContent)]
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
+        [ProducesDefaultResponseType]
+        public async Task<ActionResult> UpdateCategoryGenericTask([FromBody] UpdateCategoryGenericTaskCommand command)
+        {
+            await _mediator.Send(command);
+
+            return NoContent();
+        }
+
 
         [HttpDelete("{id}", Name = "DeleteGenericTask")]
         [ProducesResponseType(StatusCodes.Status204NoContent)]
