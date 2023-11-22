@@ -1,4 +1,5 @@
 ﻿using MediatR;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using System.Net;
 using TaskManagement.Application.Features.StatusTypes.Commands.CreateStatusTypes;
@@ -19,6 +20,7 @@ namespace TaskManagement.Api.Controllers
         }
 
         [HttpPost(Name = "CreateStatusType")]
+        [Authorize(Roles = "Administrator")]
         [ProducesResponseType((int)HttpStatusCode.OK)]
         public async Task<ActionResult<int>> CreateStatusType([FromBody] CreateStatusTypeCommand command)
         {

@@ -69,9 +69,9 @@ namespace TaskManagement.Infrastructure.Persistence
         {
             return new List<Category>
             {
-                new Category { CreatedBy = "system", Name = "In Progress" },
                 new Category { CreatedBy = "system", Name = "To Be Assigned" },
-                new Category { CreatedBy = "system", Name = "Completed" }
+                new Category { CreatedBy = "system", Name = "In Progress" },
+                new Category { CreatedBy = "system", Name = "Closed" }
             };
         }
 
@@ -80,9 +80,7 @@ namespace TaskManagement.Infrastructure.Persistence
             return new List<StatusType>
             {
                 new StatusType { CreatedBy = "system", Name = "Active" },
-                new StatusType { CreatedBy = "system", Name = "In Progress" },
-                new StatusType { CreatedBy = "system", Name = "Overdue" },
-                new StatusType { CreatedBy = "system", Name = "Closed" },
+                new StatusType { CreatedBy = "system", Name = "Completed" },
             };
         }
 

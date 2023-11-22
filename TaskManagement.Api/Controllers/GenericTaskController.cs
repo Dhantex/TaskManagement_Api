@@ -6,6 +6,7 @@ using TaskManagement.Application.Features.GenericTasks.Commands.CreateGenericTas
 using TaskManagement.Application.Features.GenericTasks.Commands.DeleteGenericTask;
 using TaskManagement.Application.Features.GenericTasks.Commands.UpdateCategoryGenericTask;
 using TaskManagement.Application.Features.GenericTasks.Commands.UpdateGenericTask;
+using TaskManagement.Application.Features.GenericTasks.Commands.UpdateStatusGenericTask;
 using TaskManagement.Application.Features.GenericTasks.Queries.GetGenericTaskDetailsList;
 using TaskManagement.Application.Models.GenericTask;
 using TaskManagement.Domain;
@@ -54,6 +55,17 @@ namespace TaskManagement.Api.Controllers
             return NoContent();
         }
 
+
+        [HttpPut("UpdateStatusId", Name = "UpdateStatusIdGenericTask")]
+        [ProducesResponseType(StatusCodes.Status204NoContent)]
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
+        [ProducesDefaultResponseType]
+        public async Task<ActionResult> UpdateStatusIdGenericTask([FromBody] UpdateStatusGenericTaskCommand command)
+        {
+            await _mediator.Send(command);
+
+            return NoContent();
+        }
 
         [HttpDelete("{id}", Name = "DeleteGenericTask")]
         [ProducesResponseType(StatusCodes.Status204NoContent)]

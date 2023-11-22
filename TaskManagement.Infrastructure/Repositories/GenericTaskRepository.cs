@@ -2,6 +2,7 @@
 using TaskManagement.Application.Contracts.Persistence;
 using TaskManagement.Application.Features.GenericTasks.Commands.CreateGenericTask;
 using TaskManagement.Application.Features.GenericTasks.Commands.UpdateCategoryGenericTask;
+using TaskManagement.Application.Features.GenericTasks.Commands.UpdateStatusGenericTask;
 using TaskManagement.Application.Features.GenericTasks.Queries.GetGenericTaskDetailsList;
 using TaskManagement.Domain;
 using TaskManagement.Infrastructure.Persistence;
@@ -75,14 +76,14 @@ namespace TaskManagement.Infrastructure.Repositories
 
             if (existingRelation == null)
             {
-                var newTaskCategory = new GenericTaskCategory
+                var updateGenericTaskCategory = new GenericTaskCategory
                 {
                     GenericTaskId = command.GenericTaskId,
                     CategoryId = command.CategoryId,
                     IsActive = true
                 };
 
-                await _context.GenericTaskCategories!.AddAsync(newTaskCategory);
+                await _context.GenericTaskCategories!.AddAsync(updateGenericTaskCategory);
             }
             else
             {
@@ -98,6 +99,41 @@ namespace TaskManagement.Infrastructure.Repositories
             }
 
             return command.CategoryId;
+        }
+
+        public async Task<int> UpdateGenericTaskStatusType(UpdateStatusGenericTaskCommand command)
+        {
+            var existingRelation = await _context.GenericTaskStatusTypes!.FirstOrDefaultAsync(c => c.GenericTaskId == command.GenericTaskId
+                                                           && c.StatusTypeId == command.StatusTypeId);
+
+            var deactivateRelationship = await _context.GenericTaskStatusTypes!.FirstOrDefaultAsync(c => c.GenericTaskId == command.GenericTaskId
+                                                                       && c.IsActive);
+
+            if (existingRelation == null)
+            {
+                var updateGenericTaskStatusType = new GenericTaskStatusType
+                {
+                    GenericTaskId = command.GenericTaskId,
+                    StatusTypeId = command.StatusTypeId,
+                    IsActive = true
+                };
+
+                await _context.GenericTaskStatusTypes!.AddAsync(updateGenericTaskStatusType);
+            }
+            else
+            {
+                existingRelation.IsActive = !existingRelation.IsActive;
+                _context.GenericTaskStatusTypes?.Update(existingRelation);
+            }
+
+
+            if (deactivateRelationship != null)
+            {
+                deactivateRelationship.IsActive = false;
+                _context.GenericTaskStatusTypes?.Update(deactivateRelationship);
+            }
+
+            return command.StatusTypeId;
         }
     }
 }
